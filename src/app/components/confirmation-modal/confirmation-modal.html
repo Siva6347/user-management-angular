@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>{{ data().title }}</h2>
-<mat-dialog-content>
-  <p>{{ data().message }}</p>
+<h2 mat-dialog-title id="dialog-title">{{ data().title }}</h2>
+<mat-dialog-content aria-describedby="dialog-description">
+  <p id="dialog-description">{{ data().message }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No</button>
-  <button mat-raised-button color="warn" (click)="onYesClick()">Yes</button>
+  <button mat-button (click)="onNoClick()" aria-label="Cancel deletion">No</button>
+  <button mat-raised-button color="warn" (click)="onYesClick()" aria-label="Confirm deletion">Yes</button>
 </mat-dialog-actions>

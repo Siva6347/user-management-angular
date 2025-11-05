@@ -3,19 +3,24 @@
     <mat-card-title>User List</mat-card-title>
     <mat-form-field class="search-field" appearance="outline">
       <mat-label>Search by name</mat-label>
-      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Search...">
-      <mat-icon matSuffix>search</mat-icon>
+      <input 
+        matInput 
+        [(ngModel)]="searchTerm" 
+        (ngModelChange)="onSearchChange()" 
+        placeholder="Search..."
+        aria-label="Search users by name">
+      <mat-icon matSuffix aria-hidden="true">search</mat-icon>
     </mat-form-field>
   </mat-card-header>
   <mat-card-content>
     @if (isLoading()) {
-      <div class="loading-container">
-        <mat-spinner></mat-spinner>
+      <div class="loading-container" role="status" aria-live="polite">
+        <mat-spinner aria-label="Loading users, please wait"></mat-spinner>
       </div>
     } @else {
       @if (filteredUsers().length > 0 && headers().length > 0) {
-        <div class="table-container">
-          <table mat-table [dataSource]="displayedUsers()" class="mat-elevation-z0">
+        <div class="table-container" role="region" aria-label="User data table">
+          <table mat-table [dataSource]="displayedUsers()" class="mat-elevation-z0" aria-label="Users list with inline editing capability">
             @for (column of headers(); track column) {
               <ng-container [matColumnDef]="column">
                 <th mat-header-cell *matHeaderCellDef>{{ column | titlecase }}</th>
@@ -28,11 +33,20 @@
                         (blur)="clearEditing()"
                         (keyup.enter)="updateUser(row, column, $event)"
                         (keyup.escape)="clearEditing()"
+                        [attr.aria-label]="'Edit ' + column + ' field'"
                         autofocus
                       />
                     </mat-form-field>
                   } @else {
-                    <span (click)="setEditing(row, column)">{{ row[column] }}</span>
+                    <span 
+                      (click)="setEditing(row, column)" 
+                      role="button" 
+                      tabindex="0"
+                      (keydown.enter)="setEditing(row, column)"
+                      (keydown.space)="setEditing(row, column)"
+                      [attr.aria-label]="'Edit ' + column + ', current value: ' + row[column]">
+                      {{ row[column] }}
+                    </span>
                   }
                 </td>
               </ng-container>
@@ -41,11 +55,19 @@
               <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let row">
                   <div style="display: flex; gap: 8px;">
-                    <button mat-icon-button (click)="goToDetails(row)" matTooltip="View Details">
-                      <mat-icon class="icon-primary">visibility</mat-icon>
+                    <button 
+                      mat-icon-button 
+                      (click)="goToDetails(row)" 
+                      matTooltip="View Details"
+                      aria-label="View details for {{row.name}}">
+                      <mat-icon class="icon-primary" aria-hidden="true">visibility</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="openConfirmationModal(row)" matTooltip="Delete">
-                      <mat-icon class="icon-warn">delete</mat-icon>
+                    <button 
+                      mat-icon-button 
+                      (click)="openConfirmationModal(row)" 
+                      matTooltip="Delete"
+                      aria-label="Delete user {{row.name}}">
+                      <mat-icon class="icon-warn" aria-hidden="true">delete</mat-icon>
                     </button>
                   </div>
                 </td>
@@ -59,17 +81,18 @@
           [pageSize]="itemsPerPage()" 
           [pageSizeOptions]="[5, 10, 25, 50]"
           (page)="onPageChange($event)"
-          showFirstLastButtons>
+          showFirstLastButtons
+          aria-label="User list pagination">
         </mat-paginator>
       } @else {
         @if (searchTerm()) {
-          <div class="no-data">
-            <mat-icon>search_off</mat-icon>
+          <div class="no-data" role="status" aria-live="polite">
+            <mat-icon aria-hidden="true">search_off</mat-icon>
             <p>No search results found for "{{ searchTerm() }}".</p>
           </div>
         } @else {
-          <div class="no-data">
-            <mat-icon>people_outline</mat-icon>
+          <div class="no-data" role="status" aria-live="polite">
+            <mat-icon aria-hidden="true">people_outline</mat-icon>
             <p>No users found.</p>
           </div>
         }
