@@ -1,0 +1,37 @@
+@use '@angular/material' as mat;
+@use './assets/styles/variables' as vars;
+@use './assets/styles/typography' as typo;
+@use './assets/styles/mixins' as mix;
+
+@include mat.core();
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$violet-palette,
+    tertiary: mat.$rose-palette,
+  ),
+));
+
+@include mat.all-component-themes($theme);
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: typo.$font-family-primary;
+  background-color: vars.$background-primary;
+  color: vars.$text-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
